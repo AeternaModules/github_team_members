@@ -26,15 +26,22 @@ EOT
     ])
     error_message = "Each members list must contain at least 1 items"
   }
-  # --- Unconfirmed validation candidates, derived from github_team_members's provider source ---
-  # Not auto-enabled: either a bespoke provider validator we can't safely translate,
-  # or a path that crosses a list-typed block (needs its own for_each wrapping).
-  # Review, translate into a real validation{} block above, and delete once confirmed.
-  # path: team_slug
-  #   source:    validation.StringIsNotWhiteSpace(...) - no translation rule yet, add one
-  # path: team_id
-  #   source:    validation.StringIsNotWhiteSpace(...) - no translation rule yet, add one
-  # path: members.role
-  #   source:    validateValueFunc: no recognizable `if ... { errors = append(...) }` pattern - read it by hand
+  validation {
+    condition = alltrue([
+      for k, v in var.team_memberses : (
+        v.team_slug == null || (length(trimspace(v.team_slug)) > 0)
+      )
+    ])
+    error_message = "must not be empty or only whitespace"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.team_memberses : (
+        v.team_id == null || (length(trimspace(v.team_id)) > 0)
+      )
+    ])
+    error_message = "must not be empty or only whitespace"
+  }
+  # Note: 1 additional provider-side validator is enforced at apply time but not mirrored as validation{} blocks here (bespoke or non-mechanically-translatable).
 }
 
