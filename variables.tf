@@ -1,6 +1,6 @@
-variable "team_memberses" {
+variable "team_members" {
   description = <<EOT
-Map of team_memberses, attributes below
+Map of team_members, attributes below
 Required:
     - members (block):
         - role (optional)
@@ -20,7 +20,7 @@ EOT
   }))
   validation {
     condition = alltrue([
-      for k, v in var.team_memberses : (
+      for k, v in var.team_members : (
         length(v.members) >= 1
       )
     ])
@@ -28,7 +28,7 @@ EOT
   }
   validation {
     condition = alltrue([
-      for k, v in var.team_memberses : (
+      for k, v in var.team_members : (
         v.team_slug == null || (length(trimspace(v.team_slug)) > 0)
       )
     ])
@@ -36,7 +36,7 @@ EOT
   }
   validation {
     condition = alltrue([
-      for k, v in var.team_memberses : (
+      for k, v in var.team_members : (
         v.team_id == null || (length(trimspace(v.team_id)) > 0)
       )
     ])

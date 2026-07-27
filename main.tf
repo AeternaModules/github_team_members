@@ -1,5 +1,5 @@
-resource "github_team_members" "team_memberses" {
-  for_each = var.team_memberses
+resource "github_team_members" "team_members" {
+  for_each = var.team_members
 
   team_id   = each.value.team_id
   team_slug = each.value.team_slug
